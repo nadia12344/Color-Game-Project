@@ -7,7 +7,9 @@ var messageDisplay = document.querySelector("#message");
 var h1 = document.querySelector("h1");
 var instructionButton = document.querySelector("#instruction");
 var easyButton = document.querySelector("#easyButton");
+var mediumButton = document.querySelector("#mediumButton");
 var hardButton = document.querySelector("#hardButton");
+var hard = false;
 
 
 var resetButton = document.querySelector("#resetButton");
@@ -15,9 +17,10 @@ resetButton.addEventListener("click",function(){
 	colors=generateColors(6);
 	for (var i = 0; i < squares.length; i++) {
 			squares[i].style.backgroundColor = colors[i];
-			pickedColor=pickColor();
 			colorDisplay.textContent = pickedColor;
 	}
+	pickedColor=pickColor();
+
 
 })
 
@@ -27,10 +30,12 @@ instructionButton.addEventListener("click",function(){
 })
 
 easyButton.addEventListener("click",function(){
+	hard = false;
 	easyButton.classList.add("selected");
+	mediumButton.classList.remove("selected");
 	hardButton.classList.remove("selected");
 	colors = generateColors(3);
-	pickedColor = pickColor(); 
+	pickedColor = pickColor();
 	colorDisplay.textContent = pickedColor;
 	for (var i = 0; i < squares.length; i++) {
 		if (colors[i]) {
@@ -41,16 +46,37 @@ easyButton.addEventListener("click",function(){
 	}
 })
 
-hardButton.addEventListener("click",function(){
-	hardButton.classList.add("selected");
+mediumButton.addEventListener("click",function(){
+	hard = false;
+	mediumButton.classList.add("selected");
 	easyButton.classList.remove("selected");
+	hardButton.classList.remove("selected");
 	colors = generateColors(6);
-	pickedColor = pickColor(); 
+	pickedColor = pickColor();
 	colorDisplay.textContent = pickedColor;
 	for (var i = 0; i < squares.length; i++) {
 		squares[i].style.backgroundColor = colors[i];
 		squares[i].style.display = "block";
+	}
+})
 
+hardButton.addEventListener("click",function(){
+	hard = true;
+	mediumButton.classList.remove("selected");
+	easyButton.classList.remove("selected");
+	hardButton.classList.add("selected");
+
+	//choose random first color
+	//make sure other colors rotate around the first color
+	//set pickedColor
+	//the only thing to do diff is generateColors!
+
+	colors = generateColors(6);
+	pickedColor = pickColor();
+	colorDisplay.textContent = pickedColor;
+	for (var i = 0; i < squares.length; i++) {
+		squares[i].style.backgroundColor = colors[i];
+		squares[i].style.display = "block";
 	}
 })
 
@@ -83,10 +109,33 @@ function pickColor(){
 
 function generateColors(num){
 	var arr=[]
-	for (var i = 0; i <num; i++) {
-		arr[i]=randomColor();
+
+	if (hard){
+		var r = Math.floor(Math.random() * 256);
+		var g = Math.floor(Math.random() * 256);
+		var b = Math.floor(Math.random() * 256);
+		var color = "rgb("+r+", "+g+", "+b+")";
+		arr[0] = color;
+		for (var i = 1; i <num; i++) {
+			arr[i]=randomHardColor(r,g,b);
+		}
+	} else{
+		for (var i = 0; i <num; i++) {
+			arr[i]=randomColor();
+		}
 	}
+
 	return arr;
+}
+
+function randomHardColor(r,g,b){
+	var colorGap = 50;
+	var r1 = Math.floor(Math.random() * ((r+colorGap) - (r-colorGap)) + (r-colorGap));
+	var g1 = Math.floor(Math.random() * ((g+colorGap) - (g-colorGap)) + (g-colorGap));
+	var b1 = Math.floor(Math.random() * ((b+colorGap) - (b-colorGap)) + (b-colorGap));
+	var color = "rgb("+r1+", "+g1+", "+b1+")";
+	return color;
+
 }
 
 function randomColor(){
