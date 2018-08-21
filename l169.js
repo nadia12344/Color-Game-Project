@@ -129,11 +129,24 @@ function generateColors(num){
 }
 
 function randomHardColor(r,g,b){
-	var colorGap = 50;
-	var r1 = Math.floor(Math.random() * ((r+colorGap) - (r-colorGap)) + (r-colorGap));
-	var g1 = Math.floor(Math.random() * ((g+colorGap) - (g-colorGap)) + (g-colorGap));
-	var b1 = Math.floor(Math.random() * ((b+colorGap) - (b-colorGap)) + (b-colorGap));
-	var color = "rgb("+r1+", "+g1+", "+b1+")";
+	console.log("chose random hard color");
+	var colorGap = 30;
+	var TotalcolorGap = 50;
+
+	var r1 = Math.floor(Math.random() * ((r+colorGap) - (r-colorGap)+1)) + (r-colorGap);
+	TotalcolorGap -= Math.abs(r-r1);
+	var g1 = Math.floor(Math.random() * ((g+colorGap) - (g-colorGap)+1)) + (g-colorGap);
+	if (g1<0){
+		g1=0;
+	}
+	TotalcolorGap -= Math.abs(g1-g);
+	var b1 = Math.floor(Math.random() * ((b+colorGap) - (b-colorGap)+1)) + (b-colorGap);
+	if (b1<0){
+		b1=0;
+	}
+	TotalcolorGap -= Math.abs(b1-b);
+
+	var color = "rgb("+Math.abs(r1)+", "+Math.abs(g1)+", "+Math.abs(b1)+")";
 	return color;
 
 }
